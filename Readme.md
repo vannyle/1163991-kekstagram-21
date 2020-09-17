@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Vanny Le](https://up.htmlacademy.ru/javascript/21/user/1163991).
-* Наставник: `Неизвестно`.
+* Наставник: [Даниил Царёв](https://htmlacademy.ru/profile/id945835).
 
 ---
 
