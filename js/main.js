@@ -65,22 +65,22 @@ const renderBigPicture = () => {
   bigPicture.querySelector(`.likes-count`).textContent = picture[0].likes;
   bigPicture.querySelector(`.comments-count`).textContent = picture[0].comment.length;
   bigPicture.querySelector(`.social__caption`).textContent = picture[0].description;
+
+  const renderComments = (item) => {
+    const markup = `
+        <li class="social__comment">
+            <img class="social__picture" src=${item.avatar} alt=${item.name} width="35" height="35">
+            <p class="social__text">${item.message}</p>
+        </li>
+       `;
+    socialComments.insertAdjacentHTML(`beforeend`, markup);
+  };
+  picture[0].comment.forEach((item) => renderComments(item));
 };
 renderBigPicture();
-
-const renderComments = (item) => {
-  const markup = `
-  <li class="social__comment">
-    <img class="social__picture" src=${item.avatar} alt=${item.name} width="35" height="35">
-    <p class="social__text">${item.message}</p>
-  </li>
-  `;
-  socialComments.insertAdjacentHTML(`beforeend`, markup);
-};
 
 // Data
 const photos = generatePhotos(IMAGES_COUNT);
 
 // Presentation
 pictures.appendChild(createFragment(photos));
-photos[0].comment.forEach((item) => renderComments(item));
