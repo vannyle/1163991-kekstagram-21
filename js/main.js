@@ -25,7 +25,6 @@ const IMAGES_COUNT = 25;
 const pictures = document.querySelector(`.pictures`);
 const pictureTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
 const bigPicture = document.querySelector(`.big-picture`);
-const socialComments = document.querySelector(`.social__comments`);
 
 // Functions
 const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -58,29 +57,29 @@ const createFragment = (photos) => {
   return fragment;
 };
 
-const renderBigPicture = () => {
-  bigPicture.classList.remove(`hidden`);
-  const picture = generatePhotos(IMAGES_COUNT);
-  bigPicture.querySelector(`.big-picture__img > img`).src = picture[0].url;
-  bigPicture.querySelector(`.likes-count`).textContent = picture[0].likes;
-  bigPicture.querySelector(`.comments-count`).textContent = picture[0].comment.length;
-  bigPicture.querySelector(`.social__caption`).textContent = picture[0].description;
-
-  const renderComments = (item) => {
-    const markup = `
-        <li class="social__comment">
-            <img class="social__picture" src=${item.avatar} alt=${item.name} width="35" height="35">
-            <p class="social__text">${item.message}</p>
-        </li>
-       `;
-    socialComments.insertAdjacentHTML(`beforeend`, markup);
-  };
-  picture[0].comment.forEach((item) => renderComments(item));
+const renderComments = (comments) => {
+  return comments.map((comment) => (`
+    <li class="social__comment">
+      <img class="social__picture" src=${comment.avatar} alt=${comment.name} width="35" height="35">
+      <p class="social__text">${comment.message}</p>
+    </li>
+  `)).join(`\n`);
 };
-renderBigPicture();
+
+const renderBigPicture = (picture) => {
+  bigPicture.querySelector(`.big-picture__img > img`).src = picture.url;
+  bigPicture.querySelector(`.likes-count`).textContent = picture.likes;
+  bigPicture.querySelector(`.comments-count`).textContent = picture.comment.length;
+  bigPicture.querySelector(`.social__caption`).textContent = picture.description;
+
+  bigPicture.querySelector(`.social__comments`).insertAdjacentHTML(`beforeend`, renderComments(picture.comment));
+
+  bigPicture.classList.remove(`hidden`);
+};
 
 // Data
 const photos = generatePhotos(IMAGES_COUNT);
 
 // Presentation
 pictures.appendChild(createFragment(photos));
+renderBigPicture(photos[0]);
