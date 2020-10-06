@@ -24,6 +24,7 @@ const IMAGES_COUNT = 25;
 // Variables
 const pictures = document.querySelector(`.pictures`);
 const pictureTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
+const bigPicture = document.querySelector(`.big-picture`);
 
 // Functions
 const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -33,7 +34,7 @@ const generatePhotos = () => new Array(IMAGES_COUNT).fill(``).map((_, idx) => ({
   url: `photos/${idx + 1}.jpg`,
   description: getRandomFromArray(PHOTO_DESCRIPTIONS),
   likes: getRandom(15, 200),
-  comment: generateComments(getRandom(1, 20)),
+  comment: generateComments(getRandom(1, 6)),
 }));
 
 const generateComments = (amount) => new Array(amount).fill(``).map(() => ({
@@ -56,7 +57,29 @@ const createFragment = (photos) => {
   return fragment;
 };
 
+const renderComments = (comments) => {
+  return comments.map((comment) => (`
+    <li class="social__comment">
+      <img class="social__picture" src=${comment.avatar} alt=${comment.name} width="35" height="35">
+      <p class="social__text">${comment.message}</p>
+    </li>
+  `)).join(`\n`);
+};
+
+const renderBigPicture = (picture) => {
+  bigPicture.querySelector(`.big-picture__img > img`).src = picture.url;
+  bigPicture.querySelector(`.likes-count`).textContent = picture.likes;
+  bigPicture.querySelector(`.comments-count`).textContent = picture.comment.length;
+  bigPicture.querySelector(`.social__caption`).textContent = picture.description;
+
+  bigPicture.querySelector(`.social__comments`).insertAdjacentHTML(`beforeend`, renderComments(picture.comment));
+
+  bigPicture.classList.remove(`hidden`);
+};
+
 // Data
 const photos = generatePhotos(IMAGES_COUNT);
+
 // Presentation
 pictures.appendChild(createFragment(photos));
+renderBigPicture(photos[0]);
