@@ -20,10 +20,20 @@ const COMMENTS = [
 ];
 const USER_NAMES = [`Артем`, `Иван`, `Петров`, `Наталия`, `София`, `Екатерина`, `Николай`];
 const IMAGES_COUNT = 25;
+const MIN_VALUE = 25;
+const STEP = 25;
+const MAX_VALUE = 100;
 
 // Variables
 const pictures = document.querySelector(`.pictures`);
 const pictureTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
+const imageUploadControl = document.querySelector(`.img-upload__control`);
+const imageUploadOverlay = document.querySelector(`.img-upload__overlay`);
+const uploadCancelButton = document.getElementById(`upload-cancel`);
+const scaleControlSmaller = imageUploadOverlay.querySelector(`.scale__control--smaller`);
+const scaleControlBigger = imageUploadOverlay.querySelector(`.scale__control--bigger`);
+const scaleControlValue = imageUploadOverlay.querySelector(`.scale__control--value`);
+const uploadPreview = imageUploadOverlay.querySelector(`.img-upload__preview`);
 
 // Functions
 const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -55,6 +65,52 @@ const createFragment = (photos) => {
   photos.map(renderPhoto).forEach((photo) => fragment.appendChild(photo));
   return fragment;
 };
+
+// Open and close upload modal
+const onUploadEscPress = (evt) => {
+  if (evt.key === `Escape`) {
+    evt.preventDefault();
+    cancelUpload();
+  }
+};
+const openUpload = () => {
+  imageUploadOverlay.classList.remove(`hidden`);
+  document.querySelector(`body`).classList.add(`modal-open`);
+  document.addEventListener(`keydown`, onUploadEscPress);
+};
+const cancelUpload = () => {
+  imageUploadOverlay.classList.add(`hidden`);
+  document.querySelector(`body`).classList.remove(`modal-open`);
+  document.removeEventListener(`keydown`, onUploadEscPress);
+};
+openUpload();
+imageUploadControl.addEventListener(`click`, openUpload);
+uploadCancelButton.addEventListener(`click`, cancelUpload);
+uploadCancelButton.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    cancelUpload();
+  }
+});
+
+// Scale control
+let value = 50;
+uploadPreview.style.transform = `scale(${value / 100})`;
+const setSmallerValue = () => {
+  if (value > MIN_VALUE) {
+    value -= STEP;
+    scaleControlValue.value = `${value}%`;
+    uploadPreview.style.transform = `scale(${value / 100})`;
+  }
+};
+const setBiggerValue = () => {
+  if (value < MAX_VALUE) {
+    value += STEP;
+    scaleControlValue.value = `${value}%`;
+    uploadPreview.style.transform = `scale(${value / 100})`;
+  }
+};
+scaleControlBigger.addEventListener(`click`, setBiggerValue);
+scaleControlSmaller.addEventListener(`click`, setSmallerValue);
 
 // Data
 const photos = generatePhotos(IMAGES_COUNT);
