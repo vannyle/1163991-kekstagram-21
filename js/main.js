@@ -23,6 +23,33 @@ const IMAGES_COUNT = 25;
 const MIN_VALUE = 25;
 const STEP = 25;
 const MAX_VALUE = 100;
+const EFFECTS = {
+  none: {
+    prop: `none`,
+  },
+  chrome: {
+    prop: `grayscale`,
+    multiplier: 1,
+  },
+  sepia: {
+    prop: `sepia`,
+    multiplier: 1,
+  },
+  marvin: {
+    prop: `invert`,
+    units: `%`,
+    multiplier: 100
+  },
+  phobos: {
+    prop: `blur`,
+    units: `px`,
+    multiplier: 3,
+  },
+  heat: {
+    prop: `brightness`,
+    multiplier: 3,
+  }
+};
 
 // Variables
 const pictures = document.querySelector(`.pictures`);
@@ -34,6 +61,8 @@ const scaleControlSmaller = imageUploadOverlay.querySelector(`.scale__control--s
 const scaleControlBigger = imageUploadOverlay.querySelector(`.scale__control--bigger`);
 const scaleControlValue = imageUploadOverlay.querySelector(`.scale__control--value`);
 const uploadPreview = imageUploadOverlay.querySelector(`.img-upload__preview`);
+const effectLevel = imageUploadOverlay.querySelector(`.effect-level`);
+const effectImages = imageUploadOverlay.querySelector(`.effects`);
 
 // Functions
 const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -65,6 +94,10 @@ const createFragment = (photos) => {
   photos.map(renderPhoto).forEach((photo) => fragment.appendChild(photo));
   return fragment;
 };
+// Data
+const photos = generatePhotos(IMAGES_COUNT);
+// Presentation
+pictures.appendChild(createFragment(photos));
 
 // Open and close upload modal
 const onUploadEscPress = (evt) => {
@@ -93,26 +126,38 @@ uploadCancelButton.addEventListener(`keydown`, (evt) => {
 });
 
 // Scale control
-let value = 50;
-uploadPreview.style.transform = `scale(${value / 100})`;
+let defaultValue = 50;
+uploadPreview.style.transform = `scale(${defaultValue / 100})`;
 const setSmallerValue = () => {
-  if (value > MIN_VALUE) {
-    value -= STEP;
-    scaleControlValue.value = `${value}%`;
-    uploadPreview.style.transform = `scale(${value / 100})`;
+  if (defaultValue > MIN_VALUE) {
+    defaultValue -= STEP;
+    scaleControlValue.value = `${defaultValue}%`;
+    uploadPreview.style.transform = `scale(${defaultValue / 100})`;
   }
 };
 const setBiggerValue = () => {
-  if (value < MAX_VALUE) {
-    value += STEP;
-    scaleControlValue.value = `${value}%`;
-    uploadPreview.style.transform = `scale(${value / 100})`;
+  if (defaultValue < MAX_VALUE) {
+    defaultValue += STEP;
+    scaleControlValue.value = `${defaultValue}%`;
+    uploadPreview.style.transform = `scale(${defaultValue / 100})`;
   }
 };
 scaleControlBigger.addEventListener(`click`, setBiggerValue);
 scaleControlSmaller.addEventListener(`click`, setSmallerValue);
 
-// Data
-const photos = generatePhotos(IMAGES_COUNT);
-// Presentation
-pictures.appendChild(createFragment(photos));
+// Image effects
+effectLevel.style.visibility = `hidden`;
+effectImages.addEventListener(`change`, (e) => {
+  const target = e.target;
+  const effect = EFFECTS[target.value];
+  if (effect) {
+    const effectValue = effect.multiplier ? `(${effect.multiplier}${effect.units || ``})` : ``;
+    uploadPreview.querySelector(`img`).style.filter = effect.prop + effectValue;
+
+    if (effect.prop === `none`) {
+      document.querySelector(`.effect-level`).style.visibility = `hidden`;
+    } else {
+      document.querySelector(`.effect-level`).style.visibility = `visible`;
+    }
+  }
+});
