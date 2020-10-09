@@ -38,7 +38,7 @@ const EFFECTS = {
   marvin: {
     prop: `invert`,
     units: `%`,
-    multiplier: 100
+    multiplier: 100,
   },
   phobos: {
     prop: `blur`,
@@ -48,7 +48,7 @@ const EFFECTS = {
   heat: {
     prop: `brightness`,
     multiplier: 3,
-  }
+  },
 };
 
 // Variables
@@ -63,6 +63,9 @@ const scaleControlValue = imageUploadOverlay.querySelector(`.scale__control--val
 const uploadPreview = imageUploadOverlay.querySelector(`.img-upload__preview`);
 const effectLevel = imageUploadOverlay.querySelector(`.effect-level`);
 const effectImages = imageUploadOverlay.querySelector(`.effects`);
+const sliderEffectPin = imageUploadOverlay.querySelector(`.effect-level__pin`);
+const sliderEffectLine = imageUploadOverlay.querySelector(`.effect-level__line`);
+const sliderEffectDepth = imageUploadOverlay.querySelector(`.effect-level__depth`);
 
 // Functions
 const getRandom = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -147,12 +150,12 @@ scaleControlSmaller.addEventListener(`click`, setSmallerValue);
 
 // Image effects
 effectLevel.style.visibility = `hidden`;
+let effect = null;
 effectImages.addEventListener(`change`, (e) => {
   const target = e.target;
-  const effect = EFFECTS[target.value];
+  effect = EFFECTS[target.value];
   if (effect) {
-    const effectValue = effect.multiplier ? `(${effect.multiplier}${effect.units || ``})` : ``;
-    uploadPreview.querySelector(`img`).style.filter = effect.prop + effectValue;
+    setEffectValue(1);
 
     if (effect.prop === `none`) {
       document.querySelector(`.effect-level`).style.visibility = `hidden`;
@@ -161,3 +164,53 @@ effectImages.addEventListener(`change`, (e) => {
     }
   }
 });
+
+
+const setEffectValue = (value) => {
+  sliderEffectPin.style.left = `${value * 100}%`;
+  sliderEffectDepth.style.width = `${value * 100}%`;
+  const effectValue = effect.multiplier ? `(${effect.multiplier * value}${effect.units || ``})` : ``;
+  uploadPreview.querySelector(`img`).style.filter = effect.prop + effectValue;
+};
+
+// Level effect slider
+sliderEffectPin.addEventListener(`mousedown`, function (evt) {
+  const SLIDER_WIDTH = parseFloat(window.getComputedStyle(sliderEffectLine).width);
+  evt.preventDefault();
+  let startCoords = {
+    x: evt.clientX,
+  };
+  let dragged = false;
+  const onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    dragged = true;
+
+    const shift = {
+      x: startCoords.x - moveEvt.clientX,
+    };
+    startCoords = {
+      x: moveEvt.clientX,
+    };
+    const newCoordsPercent = (sliderEffectPin.offsetLeft - shift.x) / SLIDER_WIDTH;
+    if (newCoordsPercent > 0 && newCoordsPercent < 1) {
+      setEffectValue(newCoordsPercent);
+    }
+  };
+  const onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    document.removeEventListener(`mousemove`, onMouseMove);
+    document.removeEventListener(`mouseup`, onMouseUp);
+
+    if (dragged) {
+      const onClickPreventDefault = function (clickEvt) {
+        clickEvt.preventDefault();
+        sliderEffectPin.removeEventListener(`click`, onClickPreventDefault);
+      };
+      sliderEffectPin.addEventListener(`click`, onClickPreventDefault);
+    }
+  };
+
+  document.addEventListener(`mousemove`, onMouseMove);
+  document.addEventListener(`mouseup`, onMouseUp);
+});
+
