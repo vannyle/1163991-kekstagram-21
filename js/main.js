@@ -55,6 +55,7 @@ const EFFECTS = {
 const pictures = document.querySelector(`.pictures`);
 const pictureTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
 const bigPicture = document.querySelector(`.big-picture`);
+const bigPictureCancel = document.querySelector(`.big-picture__cancel`);
 const imageUploadControl = document.querySelector(`.img-upload__control`);
 const imageUploadOverlay = document.querySelector(`.img-upload__overlay`);
 const uploadCancelButton = document.getElementById(`upload-cancel`);
@@ -125,7 +126,15 @@ const photos = generatePhotos(IMAGES_COUNT);
 
 // Presentation
 pictures.appendChild(createFragment(photos));
-renderBigPicture(photos[0]);
+Array.from(pictures.querySelectorAll(`.picture`)).forEach((pic, idx) => {
+  pic.addEventListener(`click`, () => {
+    renderBigPicture(photos[idx]);
+  });
+});
+
+bigPictureCancel.addEventListener(`click`, () => {
+  bigPicture.classList.add(`hidden`);
+});
 
 // Open and close upload modal
 const onUploadEscPress = (evt) => {
@@ -144,7 +153,6 @@ const cancelUpload = () => {
   document.querySelector(`body`).classList.remove(`modal-open`);
   document.removeEventListener(`keydown`, onUploadEscPress);
 };
-openUpload();
 imageUploadControl.addEventListener(`click`, openUpload);
 uploadCancelButton.addEventListener(`click`, cancelUpload);
 uploadCancelButton.addEventListener(`keydown`, (evt) => {
@@ -232,7 +240,6 @@ sliderEffectPin.addEventListener(`mousedown`, function (evt) {
       sliderEffectPin.addEventListener(`click`, onClickPreventDefault);
     }
   };
-
   document.addEventListener(`mousemove`, onMouseMove);
   document.addEventListener(`mouseup`, onMouseUp);
 });
