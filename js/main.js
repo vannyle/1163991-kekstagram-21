@@ -243,7 +243,7 @@ const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 20;
 const HASHTAGS_COUNT = 5;
 
-hashtagsInput.addEventListener(`input`, (e) => {
+hashtagsInput.addEventListener(`input`, () => {
   const arrayOfHashtags = hashtagsInput.value.split(` `);
 
   const pattern = /(?:\s|^)#[A-Za-z0-9\-\.\_]+(?:\s|$)/;
