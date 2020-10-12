@@ -26,7 +26,7 @@
     url: `photos/${idx + 1}.jpg`,
     description: getRandomFromArray(PHOTO_DESCRIPTIONS),
     likes: getRandom(15, 200),
-    comment: generateComments(getRandom(1, 6)),
+    comments: generateComments(getRandom(1, 6)),
   }));
 
   const generateComments = (amount) => new Array(amount).fill(``).map(() => ({

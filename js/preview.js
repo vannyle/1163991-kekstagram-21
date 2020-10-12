@@ -6,9 +6,9 @@
   const renderBigPicture = (picture) => {
     bigPicture.querySelector(`.big-picture__img > img`).src = picture.url;
     bigPicture.querySelector(`.likes-count`).textContent = picture.likes;
-    bigPicture.querySelector(`.comments-count`).textContent = picture.comment.length;
+    bigPicture.querySelector(`.comments-count`).textContent = picture.comments.length;
     bigPicture.querySelector(`.social__caption`).textContent = picture.description;
-    bigPicture.querySelector(`.social__comments`).insertAdjacentHTML(`beforeend`, renderComments(picture.comment));
+    bigPicture.querySelector(`.social__comments`).innerHTML = renderComments(picture.comments);
     bigPicture.classList.remove(`hidden`);
   };
 
