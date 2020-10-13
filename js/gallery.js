@@ -12,8 +12,29 @@
     window.form.setFormHandler();
   };
 
+  const errorHandler = (errorMessage) => {
+    const node = document.createElement(`div`);
+    node.style = `
+      z-index: 1;
+      margin: 0 auto;
+      text-align: center;
+      background-color: red;
+    `;
+    node.style.position = `absolute`;
+    node.style.left = `0`;
+    node.style.right = `0`;
+    node.style.fontSize = `30px`;
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement(`afterbegin`, node);
+  };
+
+  const loadGallery = () => {
+    window.load(renderGallery, errorHandler);
+  };
+
   // Export
   window.gallery = {
-    renderGallery,
+    loadGallery,
   };
 })();
