@@ -12,7 +12,7 @@
     window.form.setFormHandler();
   };
 
-  const errorHandler = function (errorMessage) {
+  const errorHandler = (errorMessage) => {
     const node = document.createElement(`div`);
     node.style = `
       z-index: 1;
@@ -29,7 +29,7 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  const loadGallery = function () {
+  const loadGallery = () => {
     window.load(renderGallery, errorHandler);
   };
 
