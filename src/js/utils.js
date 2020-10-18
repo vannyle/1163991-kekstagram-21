@@ -1,12 +1,10 @@
 const DEBOUNCE_INTERVAL = 500;
 const getRandomizedArray = (arr) => {
-  const newArr = [...arr];
-  return newArr.sort(() => Math.random() - 0.5);
+  return [...arr].sort(() => Math.random() - 0.5);
 };
 
 const getSortedCommentArr = (arr) => {
-  const newArr = [...arr];
-  return newArr.sort((a, b) => b.comments.length - a.comments.length);
+  return [...arr].sort((a, b) => b.comments.length - a.comments.length);
 };
 
 const debounce = (cb) => {
