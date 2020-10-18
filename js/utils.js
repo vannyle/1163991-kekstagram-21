@@ -1,6 +1,7 @@
 'use strict';
 
 (() => {
+  const DEBOUNCE_INTERVAL = 500;
   const getRandomizedArray = (arr) => {
     const newArr = [...arr];
     return newArr.sort(() => Math.random() - 0.5);
@@ -9,6 +10,19 @@
   const getSortedCommentArr = (arr) => {
     const newArr = [...arr];
     return newArr.sort((a, b) => b.comments.length - a.comments.length);
+  };
+
+  const debounce = (cb) => {
+    let lastTimeout = null;
+
+    return (...args) => {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(() => {
+        cb(...args);
+      }, DEBOUNCE_INTERVAL);
+    };
   };
 
   const createErrorMessage = (message) => {
@@ -26,6 +40,7 @@
   window.utils = {
     getRandomizedArray,
     getSortedCommentArr,
+    debounce,
     createErrorMessage,
   };
 })();

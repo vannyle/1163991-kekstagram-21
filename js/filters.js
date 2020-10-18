@@ -15,22 +15,24 @@
     btn.classList.add(ACTIVE_FILTER_CLASS);
   };
   const setFiltersHandler = (initialData) => {
-    filterDefault.addEventListener(`click`, () => {
+    const setDefaultDebounced = window.utils.debounce(() => {
       window.gallery.renderGallery(initialData);
       setActiveFilter(filterDefault);
     });
-
-    filterRandom.addEventListener(`click`, () => {
+    const setRandomDebounced = window.utils.debounce(() => {
       const randomPhotoJson = window.utils.getRandomizedArray(initialData).slice(0, RANDOM_PICTURES_COUNT);
       window.gallery.renderGallery(randomPhotoJson);
       setActiveFilter(filterRandom);
     });
-
-    filterDiscussed.addEventListener(`click`, () => {
+    const setDiscussedDebounced = window.utils.debounce(() => {
       const sortedData = window.utils.getSortedCommentArr(initialData);
       window.gallery.renderGallery(sortedData);
       setActiveFilter(filterDiscussed);
     });
+
+    filterDefault.addEventListener(`click`, setDefaultDebounced);
+    filterRandom.addEventListener(`click`, setRandomDebounced);
+    filterDiscussed.addEventListener(`click`, setDiscussedDebounced);
   };
   window.filters = {
     setFiltersHandler,
