@@ -1,40 +1,38 @@
 'use strict';
 
 (() => {
-  const renderGallery = (photos) => {
-    // Render pictures and return elements
-    const pictures = window.picture.renderPictures(photos);
+  let initialData = [];
 
-    // Init preview listener
-    window.preview.setPreviewHandler(pictures, photos);
+  // TODO move filters to module
+
+  const renderGallery = (data) => { // data = xhr.response
+    // Render pictures and return elements
+    const pictures = window.picture.renderPictures(data); // pictures - set of elements
+
+    // Init Preview listener
+    window.preview.setPreviewHandler(pictures, data);
 
     // Init Form listener
     window.form.setFormHandler();
+
+    // Init Filters listener
+    window.filters.setFiltersHandler(initialData);
   };
 
   const errorHandler = (errorMessage) => {
-    const node = document.createElement(`div`);
-    node.style = `
-      z-index: 1;
-      margin: 0 auto;
-      text-align: center;
-      background-color: red;
-    `;
-    node.style.position = `absolute`;
-    node.style.left = `0`;
-    node.style.right = `0`;
-    node.style.fontSize = `30px`;
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
+    window.utils.createErrorMessage(errorMessage);
   };
 
   const loadGallery = () => {
-    window.load(renderGallery, errorHandler);
+    window.load((data) => {
+      initialData = data;
+      renderGallery(data);
+    }, errorHandler);
   };
 
   // Export
   window.gallery = {
+    renderGallery,
     loadGallery,
   };
 })();

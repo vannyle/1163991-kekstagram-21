@@ -19,6 +19,10 @@
   };
 
   const renderPictures = (photos) => {
+    // Make clean up
+    pictures.querySelectorAll(`.picture`).forEach((el) => el.remove());
+
+    // Render new pictures
     pictures.appendChild(createFragment(photos));
     return pictures;
   };
