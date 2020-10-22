@@ -5,6 +5,9 @@ const uploadPreview = imageUploadOverlay.querySelector(`.img-upload__preview`);
 const fileChooser = document.getElementById(`upload-file`);
 const uploadPreviewImage = uploadPreview.querySelector(`img`);
 
+const errorMessage = document.querySelector(`#error`).content.querySelector(`.error`);
+const successMessage = document.querySelector(`#success`).content.querySelector(`.success`);
+
 // Upload image
 const getUploadImage = () => {
   const file = fileChooser.files[0];
@@ -14,11 +17,16 @@ const getUploadImage = () => {
     return fileName.endsWith(ending);
   });
 
+  const reader = new FileReader();
+  const readerLoadHandler = () => {
+    uploadPreviewImage.src = reader.result;
+  };
+  const renderErrorHandler = () => {
+    document.querySelector(`body`).appendChild(errorMessage);
+  };
   if (matches) {
-    const reader = new FileReader();
-    reader.addEventListener(`load`, () => {
-      uploadPreviewImage.src = reader.result;
-    });
+    reader.addEventListener(`load`, readerLoadHandler);
+    reader.addEventListener(`error`, renderErrorHandler);
     reader.readAsDataURL(file);
     window.form.openUpload();
   }

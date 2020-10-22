@@ -1,7 +1,7 @@
 let initialData = [];
 
 const renderGallery = (data) => { // data = xhr.response
-  // Init Upload Listener
+// Init Upload Listener
   window.upload.setUploadHandler();
 
   // Render pictures and return elements
@@ -12,9 +12,6 @@ const renderGallery = (data) => { // data = xhr.response
 
   // Init Form listener
   window.form.setFormHandler();
-
-  // Init Filters listener
-  window.filters.setFiltersHandler(initialData);
 };
 
 const errorHandler = (errorMessage) => {
@@ -25,6 +22,13 @@ const loadGallery = () => {
   window.load((data) => {
     initialData = data;
     renderGallery(data);
+    // Waiting for pictures to be loaded and then show filters
+    window.addEventListener(`load`, () => {
+      // Render filters
+      window.filters.renderFilters();
+      // Init Filters listener
+      window.filters.setFiltersHandler(initialData);
+    });
   }, errorHandler);
 };
 
