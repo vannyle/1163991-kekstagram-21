@@ -1,4 +1,6 @@
 const DEBOUNCE_INTERVAL = 500;
+const pictureTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
+
 const getRandomizedArray = (arr) => {
   return [...arr].sort(() => Math.random() - 0.5);
 };

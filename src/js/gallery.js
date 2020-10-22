@@ -1,6 +1,9 @@
 let initialData = [];
 
 const renderGallery = (data) => { // data = xhr.response
+  // Init Upload Listener
+  window.upload.setUploadHandler();
+
   // Render pictures and return elements
   const pictures = window.picture.renderPictures(data); // pictures - set of elements
 

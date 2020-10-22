@@ -3,10 +3,10 @@
 import './load';
 import './utils';
 import './gallery';
+import './upload';
 import './picture';
 import './preview';
 import './form';
-import './filters';
 import './filters';
 
 import '../css/normalize.css';
