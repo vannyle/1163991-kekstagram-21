@@ -34,10 +34,11 @@ const EFFECTS = {
 };
 
 // Selectors
-const imageUploadControl = document.querySelector(`.img-upload__control`);
 const imageUploadOverlay = document.querySelector(`.img-upload__overlay`);
-const uploadCancelButton = document.getElementById(`upload-cancel`);
 const uploadPreview = imageUploadOverlay.querySelector(`.img-upload__preview`);
+const uploadPreviewImage = uploadPreview.querySelector(`img`);
+
+const uploadCancelButton = document.getElementById(`upload-cancel`);
 const scaleControlSmaller = imageUploadOverlay.querySelector(`.scale__control--smaller`);
 const scaleControlBigger = imageUploadOverlay.querySelector(`.scale__control--bigger`);
 const scaleControlValue = imageUploadOverlay.querySelector(`.scale__control--value`);
@@ -93,7 +94,7 @@ const setEffectValue = (value) => {
   sliderEffectPin.style.left = `${value * 100}%`;
   sliderEffectDepth.style.width = `${value * 100}%`;
   const effectValue = effect.multiplier ? `(${effect.multiplier * value}${effect.units || ``})` : ``;
-  uploadPreview.querySelector(`img`).style.filter = effect.prop + effectValue;
+  uploadPreviewImage.style.filter = effect.prop + effectValue;
 };
 
 const setImageEffects = (e) => {
@@ -173,7 +174,6 @@ const setHashtagValidation = () => {
 
 // Init point
 const setFormHandler = () => {
-  imageUploadControl.addEventListener(`click`, openUpload);
   uploadCancelButton.addEventListener(`click`, cancelUpload);
   uploadCancelButton.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
@@ -189,4 +189,5 @@ const setFormHandler = () => {
 
 window.form = {
   setFormHandler,
+  openUpload,
 };

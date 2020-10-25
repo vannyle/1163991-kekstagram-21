@@ -1,5 +1,6 @@
 const bigPicture = document.querySelector(`.big-picture`);
 const bigPictureCancel = document.querySelector(`.big-picture__cancel`);
+
 const renderBigPicture = (picture) => {
   bigPicture.querySelector(`.big-picture__img > img`).src = picture.url;
   bigPicture.querySelector(`.likes-count`).textContent = picture.likes;
@@ -19,15 +20,24 @@ const renderComments = (comments) => {
 };
 
 const setPreviewHandler = (pictures, photos) => {
+  const onUploadEscPress = (evt) => {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      cancelBigPicture();
+    }
+  };
+  const cancelBigPicture = () => {
+    bigPicture.classList.add(`hidden`);
+    document.removeEventListener(`keydown`, onUploadEscPress);
+  };
   // Set handler for preview
   Array.from(pictures.querySelectorAll(`.picture`)).forEach((pic, idx) => {
     pic.addEventListener(`click`, () => {
       renderBigPicture(photos[idx]);
+      document.addEventListener(`keydown`, onUploadEscPress);
     });
   });
-  bigPictureCancel.addEventListener(`click`, () => {
-    bigPicture.classList.add(`hidden`);
-  });
+  bigPictureCancel.addEventListener(`click`, cancelBigPicture);
 };
 
 window.preview = {

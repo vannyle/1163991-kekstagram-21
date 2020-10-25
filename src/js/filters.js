@@ -5,7 +5,9 @@ const filterDiscussed = document.getElementById(`filter-discussed`);
 const RANDOM_PICTURES_COUNT = 10;
 const ACTIVE_FILTER_CLASS = `img-filters__button--active`;
 
-imgFilters.classList.remove(`img-filters--inactive`);
+const renderFilters = () => {
+  imgFilters.classList.remove(`img-filters--inactive`);
+};
 
 const setActiveFilter = (btn) => {
   document.querySelector(`.${ACTIVE_FILTER_CLASS}`).classList.remove(ACTIVE_FILTER_CLASS);
@@ -34,4 +36,5 @@ const setFiltersHandler = (initialData) => {
 
 window.filters = {
   setFiltersHandler,
+  renderFilters
 };
