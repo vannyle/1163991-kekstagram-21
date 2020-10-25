@@ -35,7 +35,7 @@
     "test": "eslint src/js/",
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --mode development --open"
+    "start": "NODE_ENV='development' webpack-dev-server --open"
   },
   "engines": {
     "node": "8.11"
