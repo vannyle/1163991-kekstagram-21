@@ -24,7 +24,7 @@ const getUploadImage = () => {
   if (matches) {
     reader.addEventListener(`load`, readerLoadHandler);
     reader.readAsDataURL(file);
-    window.form.openUpload();
+    window.form.openUploadModal();
   }
 };
 

@@ -61,6 +61,8 @@ const successMessage = document.querySelector(`#success`).content.querySelector(
 
 let scaleValue = 100;
 let effect = null;
+// eslint-disable-next-line no-unused-vars
+let isUploadModalOpened = false;
 
 // Open and close upload modal
 const onUploadEscPress = (evt) => {
@@ -73,11 +75,15 @@ const openUploadModal = () => {
   imageUploadOverlay.classList.remove(`hidden`);
   document.querySelector(`body`).classList.add(`modal-open`);
   document.addEventListener(`keydown`, onUploadEscPress);
+  isUploadModalOpened = true;
 };
 const cancelUploadModal = () => {
-  imageUploadOverlay.classList.add(`hidden`);
-  document.querySelector(`body`).classList.remove(`modal-open`);
-  document.removeEventListener(`keydown`, onUploadEscPress);
+  if (document.activeElement !== textDescription) {
+    imageUploadOverlay.classList.add(`hidden`);
+    document.querySelector(`body`).classList.remove(`modal-open`);
+    document.removeEventListener(`keydown`, onUploadEscPress);
+    isUploadModalOpened = false;
+  }
 
   // Reset to defaults
   resetToDefaults();
