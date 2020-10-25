@@ -78,7 +78,7 @@ const openUploadModal = () => {
   isUploadModalOpened = true;
 };
 const cancelUploadModal = () => {
-  if (document.activeElement !== textDescription) {
+  if (document.activeElement !== hashtagsInput && document.activeElement !== textDescription) {
     imageUploadOverlay.classList.add(`hidden`);
     document.querySelector(`body`).classList.remove(`modal-open`);
     document.removeEventListener(`keydown`, onUploadEscPress);
@@ -194,22 +194,31 @@ const setLevelEffectSlider = (evt) => {
 // Hashtags validation
 const setHashtagValidation = () => {
   const arrayOfHashtags = hashtagsInput.value.split(` `);
-
   const pattern = /(?:\s|^)#[A-Za-z0-9\-\.\_]+(?:\s|$)/;
+  const hashtagSymbolsLength = hashtagsInput.value.length;
+
+  if (hashtagSymbolsLength < MIN_HASHTAGS_LENGTH) {
+    hashtagsInput.setCustomValidity(`Ещё ${(MIN_HASHTAGS_LENGTH - hashtagSymbolsLength)} симв.`);
+  } else if (hashtagSymbolsLength > MAX_HASHTAGS_LENGTH) {
+    hashtagsInput.setCustomValidity(`Удалите лишние ${(hashtagSymbolsLength - MAX_HASHTAGS_LENGTH)} симв.`);
+  } else {
+    hashtagsInput.setCustomValidity(``);
+  }
+
   arrayOfHashtags.forEach((hashtag) => {
-    if (hashtag.length < MIN_HASHTAGS_LENGTH) {
-      hashtagsInput.setCustomValidity(`Ещё ${(MIN_HASHTAGS_LENGTH - hashtag.length)} симв.`);
-    } else if (hashtag.length > MAX_HASHTAGS_LENGTH) {
-      hashtagsInput.setCustomValidity(`Удалите лишние ${(hashtag.length - MAX_HASHTAGS_LENGTH)} симв.`);
-    } else if (!pattern.test(hashtagsInput.value)) {
-      hashtagsInput.setCustomValidity(`Хэштеги начинаются с # не должны содержать символы и пробелы`);
-    } else {
-      hashtagsInput.setCustomValidity(``);
-    }
-    if (arrayOfHashtags.length > HASHTAGS_COUNT) {
-      hashtagsInput.setCustomValidity(`Не больше пяти хэштегов`);
+    if (!pattern.test(hashtag)) {
+      hashtagsInput.setCustomValidity(`Хэштеги начинаются с # и не должны содержать символы, пробелы.`);
     }
   });
+
+  if (window.utils.checkIfDuplicateExists(arrayOfHashtags)) {
+    hashtagsInput.setCustomValidity(`Хэштеги не должны повторяться.`);
+  }
+
+  if (arrayOfHashtags.length > HASHTAGS_COUNT) {
+    hashtagsInput.setCustomValidity(`Не больше пяти хэштегов`);
+  }
+
   hashtagsInput.reportValidity();
 };
 

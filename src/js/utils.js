@@ -21,6 +21,12 @@ const debounce = (cb) => {
   };
 };
 
+
+const checkIfDuplicateExists = (arr) => {
+  return new Set(arr).size !== arr.length;
+};
+
+
 const createErrorMessage = (message) => {
   let node = document.createElement(`div`);
   node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
@@ -38,4 +44,5 @@ window.utils = {
   getSortedCommentArr,
   debounce,
   createErrorMessage,
+  checkIfDuplicateExists
 };
