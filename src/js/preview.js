@@ -10,8 +10,9 @@ const renderBigPicture = (picture) => {
   bigPicture.classList.remove(`hidden`);
 };
 
-const renderComments = (comments) => {
-  return comments.map((comment) => (`
+const renderComments = (comments, numShowComments = 5) => {
+  const showComments = comments.slice(0, numShowComments);
+  return showComments.map((comment) => (`
     <li class="social__comment">
       <img class="social__picture" src=${comment.avatar} alt=${comment.name} width="35" height="35">
       <p class="social__text">${comment.message}</p>
