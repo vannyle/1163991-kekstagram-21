@@ -193,32 +193,28 @@ const setLevelEffectSlider = (evt) => {
 
 // Hashtags validation
 const setHashtagValidation = () => {
-  const arrayOfHashtags = hashtagsInput.value.split(` `);
-  const pattern = /(?:\s|^)#[A-Za-z0-9\-\.\_]+(?:\s|$)/;
-  const hashtagSymbolsLength = hashtagsInput.value.length;
+  const arrayOfHashtags = hashtagsInput.value.split(` `).filter(Boolean);
+  const pattern = /(?:\s|^)#[0-9A-Za-zА-Яа-яё]+(?:\s|$)/;
 
-  if (hashtagSymbolsLength < MIN_HASHTAGS_LENGTH) {
-    hashtagsInput.setCustomValidity(`Ещё ${(MIN_HASHTAGS_LENGTH - hashtagSymbolsLength)} симв.`);
-  } else if (hashtagSymbolsLength > MAX_HASHTAGS_LENGTH) {
-    hashtagsInput.setCustomValidity(`Удалите лишние ${(hashtagSymbolsLength - MAX_HASHTAGS_LENGTH)} симв.`);
-  } else {
-    hashtagsInput.setCustomValidity(``);
-  }
-
+  const hashTags = new Set();
   arrayOfHashtags.forEach((hashtag) => {
-    if (!pattern.test(hashtag)) {
+    const len = hashtag.length;
+    if (len < MIN_HASHTAGS_LENGTH) {
+      hashtagsInput.setCustomValidity(`Ещё ${(MIN_HASHTAGS_LENGTH - len)} симв.`);
+    } else if (len > MAX_HASHTAGS_LENGTH) {
+      hashtagsInput.setCustomValidity(`Удалите лишние ${(len - MAX_HASHTAGS_LENGTH)} симв.`);
+    } else if (!pattern.test(hashtag)) {
       hashtagsInput.setCustomValidity(`Хэштеги начинаются с # и не должны содержать символы, пробелы.`);
+    } else if (hashTags.has(hashtag.toLowerCase())) {
+      hashtagsInput.setCustomValidity(`Хэштеги не должны повторяться.`);
+    } else {
+      hashtagsInput.setCustomValidity(``);
     }
+    hashTags.add(hashtag.toLowerCase());
   });
-
-  if (window.utils.checkIfDuplicateExists(arrayOfHashtags)) {
-    hashtagsInput.setCustomValidity(`Хэштеги не должны повторяться.`);
-  }
-
   if (arrayOfHashtags.length > HASHTAGS_COUNT) {
     hashtagsInput.setCustomValidity(`Не больше пяти хэштегов`);
   }
-
   hashtagsInput.reportValidity();
 };
 
@@ -275,7 +271,7 @@ const setFormHandler = () => {
   scaleControlSmaller.addEventListener(`click`, setSmallerValue);
   effectImages.addEventListener(`change`, handleChangeImageEffect);
   sliderEffectPin.addEventListener(`mousedown`, setLevelEffectSlider);
-  hashtagsInput.addEventListener(`input`, setHashtagValidation);
+  hashtagsInput.addEventListener(`input`, window.utils.debounce(setHashtagValidation));
   textDescription.addEventListener(`input`, setMessageValidation);
   imageUploadForm.addEventListener(`submit`, submitHandler);
 
