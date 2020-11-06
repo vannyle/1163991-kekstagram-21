@@ -1,6 +1,6 @@
 'use-strict';
 
-import './load';
+import './load-data';
 import './utils';
 import './gallery';
 import './upload';

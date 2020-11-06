@@ -18,17 +18,25 @@ const errorHandler = (errorMessage) => {
   window.utils.createErrorMessage(errorMessage);
 };
 
+const enableFilters = () => {
+  // Render filters
+  window.filters.renderFilters();
+  // Init Filters listener
+  window.filters.setFiltersHandler(initialData);
+};
+
 const loadGallery = () => {
-  window.load((data) => {
+  window.loadData((data) => {
     initialData = data;
     renderGallery(data);
-    // Waiting for pictures to be loaded and then show filters
-    window.addEventListener(`load`, () => {
-      // Render filters
-      window.filters.renderFilters();
-      // Init Filters listener
-      window.filters.setFiltersHandler(initialData);
-    });
+
+    if (document.readyState === `complete`) {
+      enableFilters();
+    } else {
+      // Waiting for pictures to be loaded and then show filters
+      window.addEventListener(`load`, enableFilters);
+    }
+
   }, errorHandler);
 };
 

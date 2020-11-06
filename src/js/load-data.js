@@ -1,4 +1,4 @@
-window.load = (onSuccess, onError) => {
+window.loadData = (onSuccess, onError) => {
   const URL = `https://21.javascript.pages.academy/kekstagram/data`;
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
