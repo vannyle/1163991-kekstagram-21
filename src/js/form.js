@@ -197,6 +197,8 @@ const setHashtagValidation = () => {
   const pattern = /(?:\s|^)#[0-9A-Za-zА-Яа-яё]+(?:\s|$)/;
 
   const hashTags = new Set();
+  hashtagsInput.setCustomValidity(``);
+
   arrayOfHashtags.forEach((hashtag) => {
     const len = hashtag.length;
     if (len < MIN_HASHTAGS_LENGTH) {
@@ -207,14 +209,19 @@ const setHashtagValidation = () => {
       hashtagsInput.setCustomValidity(`Хэштеги начинаются с # и не должны содержать символы, пробелы.`);
     } else if (hashTags.has(hashtag.toLowerCase())) {
       hashtagsInput.setCustomValidity(`Хэштеги не должны повторяться.`);
-    } else {
-      hashtagsInput.setCustomValidity(``);
     }
     hashTags.add(hashtag.toLowerCase());
   });
   if (arrayOfHashtags.length > HASHTAGS_COUNT) {
     hashtagsInput.setCustomValidity(`Не больше пяти хэштегов`);
   }
+
+  if (!hashtagsInput.validity.valid) {
+    hashtagsInput.style.outlineColor = `red`;
+  } else {
+    hashtagsInput.style.outlineColor = `#4D90FE`;
+  }
+
   hashtagsInput.reportValidity();
 };
 
