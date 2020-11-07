@@ -1,3 +1,5 @@
+'use strict';
+
 const bigPicture = document.querySelector(`.big-picture`);
 const bigPictureCancel = document.querySelector(`.big-picture__cancel`);
 const moreComments = bigPicture.querySelector(`.comments-loader`);
@@ -28,14 +30,14 @@ const renderComment = (comment) => `
 const renderComments = (comments) => {
   const showComments = comments.slice(0, commentsLimit);
   bigPicture.querySelector(`.comments-counter`).textContent = showComments.length;
-  return showComments.map((comment) => renderComment(comment));
+  return showComments.map((comment) => renderComment(comment)).join(``);
 };
 
 const setPreviewHandler = (pictures, photos) => {
   let currentPicture = null;
 
   const onUploadEscPress = (evt) => {
-    if (evt.key === `Escape`) {
+    if (window.utils.isEsc(evt.key)) {
       evt.preventDefault();
       cancelBigPicture();
     }

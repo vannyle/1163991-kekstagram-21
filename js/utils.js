@@ -1,3 +1,5 @@
+'use strict';
+
 const DEBOUNCE_INTERVAL = 500;
 
 const getRandomizedArray = (arr) => {
@@ -33,9 +35,19 @@ const createErrorMessage = (message) => {
   document.body.insertAdjacentElement(`afterbegin`, node);
 };
 
+const isEsc = (key) => {
+  return key === `Escape`;
+};
+
+const STATUS_CODE = {
+  OK: 200,
+};
+
 window.utils = {
   getRandomizedArray,
   getSortedCommentArr,
   debounce,
   createErrorMessage,
+  isEsc,
+  STATUS_CODE
 };

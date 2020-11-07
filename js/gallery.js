@@ -1,3 +1,5 @@
+'use strict';
+
 let initialData = [];
 
 const renderGallery = (data) => { // data = xhr.response

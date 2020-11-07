@@ -1,13 +1,14 @@
+'use strict';
+
+const DATA_URL = `https://21.javascript.pages.academy/kekstagram/data`;
+const TIMEOUT_IN_MS = 10000;
+
 window.loadData = (onSuccess, onError) => {
-  const URL = `https://21.javascript.pages.academy/kekstagram/data`;
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
-  const StatusCode = {
-    OK: 200,
-  };
-  const TIMEOUT_IN_MS = 10000;
+
   xhr.addEventListener(`load`, () => {
-    if (xhr.status === StatusCode.OK) {
+    if (xhr.status === window.utils.STATUS_CODE.OK) {
       onSuccess(xhr.response);
     } else {
       onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
@@ -21,7 +22,6 @@ window.loadData = (onSuccess, onError) => {
   });
 
   xhr.timeout = TIMEOUT_IN_MS;
-
-  xhr.open(`GET`, URL);
+  xhr.open(`GET`, DATA_URL);
   xhr.send();
 };

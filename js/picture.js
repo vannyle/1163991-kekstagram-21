@@ -1,3 +1,5 @@
+'use strict';
+
 const pictures = document.querySelector(`.pictures`);
 const pictureTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
 

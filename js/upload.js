@@ -1,7 +1,11 @@
+'use strict';
+
 const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];
+const UPLOAD_URL = `https://21.javascript.pages.academy/kekstagram`;
+
 const imageUploadOverlay = document.querySelector(`.img-upload__overlay`);
 const uploadPreview = imageUploadOverlay.querySelector(`.img-upload__preview`);
-const fileChooser = document.getElementById(`upload-file`);
+const fileChooser = document.querySelector(`#upload-file`);
 const uploadPreviewImage = uploadPreview.querySelector(`img`);
 const effectPreview = imageUploadOverlay.querySelectorAll(`.effects__preview`);
 
@@ -28,15 +32,15 @@ const getUploadImage = () => {
   }
 };
 
-const URL = `https://21.javascript.pages.academy/kekstagram`;
+const cleanUploadedFile = () => {
+  fileChooser.value = ``;
+};
+
 const setUpload = (data, onSuccess, onError) => {
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
-  const StatusCode = {
-    OK: 200,
-  };
   xhr.addEventListener(`load`, () => {
-    if (xhr.status === StatusCode.OK) {
+    if (xhr.status === window.utils.STATUS_CODE.OK) {
       onSuccess(xhr.response);
     } else {
       onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
@@ -47,7 +51,7 @@ const setUpload = (data, onSuccess, onError) => {
     onError();
   });
 
-  xhr.open(`POST`, URL);
+  xhr.open(`POST`, UPLOAD_URL);
   xhr.send(data);
 };
 
@@ -58,4 +62,5 @@ const setUploadHandler = () => {
 window.upload = {
   setUploadHandler,
   setUpload,
+  cleanUploadedFile,
 };

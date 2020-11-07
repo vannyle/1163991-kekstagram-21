@@ -1,3 +1,5 @@
+'use strict';
+
 // Constants
 const MIN_VALUE = 25;
 const STEP = 25;
@@ -41,7 +43,7 @@ const imageUploadOverlay = document.querySelector(`.img-upload__overlay`);
 const uploadPreview = imageUploadOverlay.querySelector(`.img-upload__preview`);
 const uploadPreviewImage = uploadPreview.querySelector(`img`);
 
-const uploadCancelButton = document.getElementById(`upload-cancel`);
+const uploadCancelButton = document.querySelector(`#upload-cancel`);
 const scaleControlSmaller = imageUploadOverlay.querySelector(`.scale__control--smaller`);
 const scaleControlBigger = imageUploadOverlay.querySelector(`.scale__control--bigger`);
 const scaleControlValue = imageUploadOverlay.querySelector(`.scale__control--value`);
@@ -61,12 +63,10 @@ const successMessage = document.querySelector(`#success`).content.querySelector(
 
 let scaleValue = 100;
 let effect = null;
-// eslint-disable-next-line no-unused-vars
-let isUploadModalOpened = false;
 
 // Open and close upload modal
 const onUploadEscPress = (evt) => {
-  if (evt.key === `Escape`) {
+  if (window.utils.isEsc(evt.key)) {
     evt.preventDefault();
     cancelUploadModal();
   }
@@ -75,14 +75,16 @@ const openUploadModal = () => {
   imageUploadOverlay.classList.remove(`hidden`);
   document.querySelector(`body`).classList.add(`modal-open`);
   document.addEventListener(`keydown`, onUploadEscPress);
-  isUploadModalOpened = true;
 };
 const cancelUploadModal = () => {
   if (document.activeElement !== hashtagsInput && document.activeElement !== textDescription) {
     imageUploadOverlay.classList.add(`hidden`);
     document.querySelector(`body`).classList.remove(`modal-open`);
     document.removeEventListener(`keydown`, onUploadEscPress);
-    isUploadModalOpened = false;
+
+    window.upload.cleanUploadedFile();
+    hashtagsInput.value = ``;
+    textDescription.value = ``;
   }
 
   // Reset to defaults
@@ -102,13 +104,13 @@ const resetToDefaults = () => {
 };
 
 // Scale control
-const setSmallerValue = () => {
+const setSmallerValueHandler = () => {
   if (scaleValue > MIN_VALUE) {
     scaleValue -= STEP;
     updateScale();
   }
 };
-const setBiggerValue = () => {
+const setBiggerValueHandler = () => {
   if (scaleValue < MAX_VALUE) {
     scaleValue += STEP;
     updateScale();
@@ -132,7 +134,7 @@ const setEffectValue = (value) => {
   }
 };
 
-const handleChangeImageEffect = (e) => {
+const changeImageEffectHandler = (e) => {
   const target = e.target;
   effect = EFFECTS[target.value];
   setImageEffects(effect);
@@ -152,7 +154,7 @@ const setImageEffects = (effectObj) => {
 };
 
 // Level effect slider
-const setLevelEffectSlider = (evt) => {
+const setLevelEffectSliderHandler = (evt) => {
   const SLIDER_WIDTH = parseFloat(window.getComputedStyle(sliderEffectLine).width);
   evt.preventDefault();
   let startCoords = {
@@ -192,7 +194,7 @@ const setLevelEffectSlider = (evt) => {
 };
 
 // Hashtags validation
-const setHashtagValidation = () => {
+const setHashtagValidationHandler = () => {
   const arrayOfHashtags = hashtagsInput.value.split(` `).filter(Boolean);
   const pattern = /(?:\s|^)#[0-9A-Za-zА-Яа-яё]+(?:\s|$)/;
 
@@ -226,13 +228,13 @@ const setHashtagValidation = () => {
 };
 
 // Message validation
-const setMessageValidation = () => {
+const setMessageValidationHandler = () => {
   textDescription.maxLength = MAX_MESSAGE_SYMBOLS;
 };
 
 // Submit form
 const onMessageEscPress = (evt, messageElement) => {
-  if (evt.key === `Escape`) {
+  if (window.utils.isEsc(evt.key)) {
     evt.preventDefault();
     messageElement.style.visibility = `hidden`;
   }
@@ -264,6 +266,7 @@ const submitHandler = (evt) => {
   };
   window.upload.setUpload(new FormData(imageUploadForm), onSuccess, onError);
   evt.preventDefault();
+  window.upload.cleanUploadedFile();
 };
 
 // Init point
@@ -274,12 +277,12 @@ const setFormHandler = () => {
       cancelUploadModal();
     }
   });
-  scaleControlBigger.addEventListener(`click`, setBiggerValue);
-  scaleControlSmaller.addEventListener(`click`, setSmallerValue);
-  effectImages.addEventListener(`change`, handleChangeImageEffect);
-  sliderEffectPin.addEventListener(`mousedown`, setLevelEffectSlider);
-  hashtagsInput.addEventListener(`input`, window.utils.debounce(setHashtagValidation));
-  textDescription.addEventListener(`input`, setMessageValidation);
+  scaleControlBigger.addEventListener(`click`, setBiggerValueHandler);
+  scaleControlSmaller.addEventListener(`click`, setSmallerValueHandler);
+  effectImages.addEventListener(`change`, changeImageEffectHandler);
+  sliderEffectPin.addEventListener(`mousedown`, setLevelEffectSliderHandler);
+  hashtagsInput.addEventListener(`input`, window.utils.debounce(setHashtagValidationHandler));
+  textDescription.addEventListener(`input`, setMessageValidationHandler);
   imageUploadForm.addEventListener(`submit`, submitHandler);
 
   // Reset all to defaults once app loaded

@@ -1,7 +1,9 @@
+'use strict';
+
 const imgFilters = document.querySelector(`.img-filters`);
-const filterDefault = document.getElementById(`filter-default`);
-const filterRandom = document.getElementById(`filter-random`);
-const filterDiscussed = document.getElementById(`filter-discussed`);
+const filterDefault = document.querySelector(`#filter-default`);
+const filterRandom = document.querySelector(`#filter-random`);
+const filterDiscussed = document.querySelector(`#filter-discussed`);
 const RANDOM_PICTURES_COUNT = 10;
 const ACTIVE_FILTER_CLASS = `img-filters__button--active`;
 

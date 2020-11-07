@@ -15,6 +15,7 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^7.1.5",
+    "babel-minify-webpack-plugin": "^0.3.1",
     "babel-polyfill": "^6.26.0",
     "copy-webpack-plugin": "^6.2.1",
     "eslint": "^7.1.0",
@@ -32,7 +33,7 @@
     "style-loader": "^2.0.0"
   },
   "scripts": {
-    "test": "eslint src/js/",
+    "test": "eslint js/",
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
     "start": "NODE_ENV='development' webpack-dev-server --open"
