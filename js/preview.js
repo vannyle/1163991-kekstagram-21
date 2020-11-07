@@ -33,16 +33,16 @@ const renderComments = (comments) => {
   return showComments.map((comment) => renderComment(comment)).join(``);
 };
 
-const setPreviewHandler = (pictures, photos) => {
+const setBigPictureHandler = (pictures, photos) => {
   let currentPicture = null;
 
   const onUploadEscPress = (evt) => {
     if (window.utils.isEsc(evt.key)) {
       evt.preventDefault();
-      cancelBigPicture();
+      cancelBigPictureHandler();
     }
   };
-  const cancelBigPicture = () => {
+  const cancelBigPictureHandler = () => {
     bigPicture.classList.add(`hidden`);
     document.removeEventListener(`keydown`, onUploadEscPress);
   };
@@ -54,7 +54,7 @@ const setPreviewHandler = (pictures, photos) => {
       document.addEventListener(`keydown`, onUploadEscPress);
     });
   });
-  bigPictureCancel.addEventListener(`click`, cancelBigPicture);
+  bigPictureCancel.addEventListener(`click`, cancelBigPictureHandler);
 
   moreComments.addEventListener(`click`, () => {
     if (currentPicture) {
@@ -69,5 +69,5 @@ const setPreviewHandler = (pictures, photos) => {
 };
 
 window.preview = {
-  setPreviewHandler,
+  setBigPictureHandler,
 };

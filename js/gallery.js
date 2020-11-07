@@ -2,41 +2,41 @@
 
 let initialData = [];
 
-const renderGallery = (data) => { // data = xhr.response
+const renderAllItems = (data) => { // data = xhr.response
 // Init Upload Listener
-  window.upload.setUploadHandler();
+  window.upload.setDataHandler();
 
   // Render pictures and return elements
   const pictures = window.picture.renderPictures(data); // pictures - set of elements
 
   // Init Preview listener
-  window.preview.setPreviewHandler(pictures, data);
+  window.preview.setBigPictureHandler(pictures, data);
 
   // Init Form listener
-  window.form.setFormHandler();
+  window.form.setModalHandler();
 };
 
 const errorHandler = (errorMessage) => {
   window.utils.createErrorMessage(errorMessage);
 };
 
-const enableFilters = () => {
+const enableFiltersHandler = () => {
   // Render filters
-  window.filters.renderFilters();
+  window.filters.renderItems();
   // Init Filters listener
-  window.filters.setFiltersHandler(initialData);
+  window.filters.setItemsHandler(initialData);
 };
 
-const loadGallery = () => {
+const loadAllItems = () => {
   window.loadData((data) => {
     initialData = data;
-    renderGallery(data);
+    renderAllItems(data);
 
     if (document.readyState === `complete`) {
-      enableFilters();
+      enableFiltersHandler();
     } else {
       // Waiting for pictures to be loaded and then show filters
-      window.addEventListener(`load`, enableFilters);
+      window.addEventListener(`load`, enableFiltersHandler);
     }
 
   }, errorHandler);
@@ -44,6 +44,6 @@ const loadGallery = () => {
 
 // Export
 window.gallery = {
-  renderGallery,
-  loadGallery,
+  renderAllItems,
+  loadAllItems,
 };

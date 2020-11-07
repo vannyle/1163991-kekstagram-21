@@ -82,7 +82,7 @@ const cancelUploadModal = () => {
     document.querySelector(`body`).classList.remove(`modal-open`);
     document.removeEventListener(`keydown`, onUploadEscPress);
 
-    window.upload.cleanUploadedFile();
+    window.upload.cleanFile();
     hashtagsInput.value = ``;
     textDescription.value = ``;
   }
@@ -194,7 +194,7 @@ const setLevelEffectSliderHandler = (evt) => {
 };
 
 // Hashtags validation
-const setHashtagValidationHandler = () => {
+const setHashtagValidation = () => {
   const arrayOfHashtags = hashtagsInput.value.split(` `).filter(Boolean);
   const pattern = /(?:\s|^)#[0-9A-Za-zА-Яа-яё]+(?:\s|$)/;
 
@@ -264,13 +264,13 @@ const submitHandler = (evt) => {
     cancelUploadModal();
     renderMessageHandler(errorMessage);
   };
-  window.upload.setUpload(new FormData(imageUploadForm), onSuccess, onError);
+  window.upload.setData(new FormData(imageUploadForm), onSuccess, onError);
   evt.preventDefault();
-  window.upload.cleanUploadedFile();
+  window.upload.cleanFile();
 };
 
 // Init point
-const setFormHandler = () => {
+const setModalHandler = () => {
   uploadCancelButton.addEventListener(`click`, cancelUploadModal);
   uploadCancelButton.addEventListener(`keydown`, (evt) => {
     if (evt.key === `Enter`) {
@@ -281,7 +281,7 @@ const setFormHandler = () => {
   scaleControlSmaller.addEventListener(`click`, setSmallerValueHandler);
   effectImages.addEventListener(`change`, changeImageEffectHandler);
   sliderEffectPin.addEventListener(`mousedown`, setLevelEffectSliderHandler);
-  hashtagsInput.addEventListener(`input`, window.utils.debounce(setHashtagValidationHandler));
+  hashtagsInput.addEventListener(`input`, window.utils.debounce(setHashtagValidation));
   textDescription.addEventListener(`input`, setMessageValidationHandler);
   imageUploadForm.addEventListener(`submit`, submitHandler);
 
@@ -290,6 +290,6 @@ const setFormHandler = () => {
 };
 
 window.form = {
-  setFormHandler,
+  setModalHandler,
   openUploadModal,
 };

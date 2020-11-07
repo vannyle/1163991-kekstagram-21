@@ -10,7 +10,7 @@ const uploadPreviewImage = uploadPreview.querySelector(`img`);
 const effectPreview = imageUploadOverlay.querySelectorAll(`.effects__preview`);
 
 // Upload image
-const getUploadImage = () => {
+const getUploadImageHandler = () => {
   const file = fileChooser.files[0];
   const fileName = file.name.toLowerCase();
 
@@ -32,11 +32,11 @@ const getUploadImage = () => {
   }
 };
 
-const cleanUploadedFile = () => {
+const cleanFile = () => {
   fileChooser.value = ``;
 };
 
-const setUpload = (data, onSuccess, onError) => {
+const setData = (data, onSuccess, onError) => {
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
   xhr.addEventListener(`load`, () => {
@@ -55,12 +55,12 @@ const setUpload = (data, onSuccess, onError) => {
   xhr.send(data);
 };
 
-const setUploadHandler = () => {
-  fileChooser.addEventListener(`change`, getUploadImage);
+const setDataHandler = () => {
+  fileChooser.addEventListener(`change`, getUploadImageHandler);
 };
 
 window.upload = {
-  setUploadHandler,
-  setUpload,
-  cleanUploadedFile,
+  setDataHandler,
+  setData,
+  cleanFile,
 };
