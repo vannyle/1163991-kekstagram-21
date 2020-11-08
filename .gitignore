@@ -6,7 +6,7 @@
 *.psd
 *.sublime*
 build/
-dist/
+bundle.js
 node_modules/
 npm-debug.log*
 Thumbs.db
