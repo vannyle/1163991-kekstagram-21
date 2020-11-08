@@ -36,7 +36,7 @@ const cleanFile = () => {
   fileChooser.value = ``;
 };
 
-const setData = (data, onSuccess, onError) => {
+const getData = (data, onSuccess, onError) => {
   const xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
   xhr.addEventListener(`load`, () => {
@@ -55,12 +55,12 @@ const setData = (data, onSuccess, onError) => {
   xhr.send(data);
 };
 
-const setDataHandler = () => {
+const getDataHandler = () => {
   fileChooser.addEventListener(`change`, getUploadImageHandler);
 };
 
 window.upload = {
-  setDataHandler,
-  setData,
+  getDataHandler,
+  getData,
   cleanFile,
 };

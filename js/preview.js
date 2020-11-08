@@ -17,6 +17,7 @@ const renderBigPicture = (picture) => {
   bigPicture.querySelector(`.social__caption`).textContent = picture.description;
   bigPicture.querySelector(`.social__comments`).innerHTML = renderComments(picture.comments);
   bigPicture.classList.remove(`hidden`);
+  document.querySelector(`body`).classList.add(`modal-open`);
 };
 
 const renderComment = (comment) => `
@@ -33,8 +34,20 @@ const renderComments = (comments) => {
   return showComments.map((comment) => renderComment(comment)).join(``);
 };
 
+let openBigPictureHandler = null;
+
 const setBigPictureHandler = (pictures, photos) => {
   let currentPicture = null;
+
+  openBigPictureHandler = (e) => {
+    e.preventDefault();
+    const idx = parseInt(e.currentTarget.dataset.picIndex, 10);
+    if (typeof idx !== `undefined`) {
+      currentPicture = photos[idx];
+      renderBigPicture(currentPicture);
+      document.addEventListener(`keydown`, onUploadEscPress);
+    }
+  };
 
   const onUploadEscPress = (evt) => {
     if (window.utils.isEsc(evt.key)) {
@@ -44,15 +57,12 @@ const setBigPictureHandler = (pictures, photos) => {
   };
   const cancelBigPictureHandler = () => {
     bigPicture.classList.add(`hidden`);
+    document.querySelector(`body`).classList.remove(`modal-open`);
     document.removeEventListener(`keydown`, onUploadEscPress);
   };
   // Set handler for preview
-  Array.from(pictures.querySelectorAll(`.picture`)).forEach((pic, idx) => {
-    pic.addEventListener(`click`, () => {
-      currentPicture = photos[idx];
-      renderBigPicture(currentPicture);
-      document.addEventListener(`keydown`, onUploadEscPress);
-    });
+  Array.from(pictures.querySelectorAll(`.picture`)).forEach((pic) => {
+    pic.addEventListener(`click`, openBigPictureHandler);
   });
   bigPictureCancel.addEventListener(`click`, cancelBigPictureHandler);
 
@@ -68,6 +78,13 @@ const setBigPictureHandler = (pictures, photos) => {
   });
 };
 
+const removeListeners = (photos) => {
+  photos.forEach((photo) => {
+    photo.removeEventListener(`click`, openBigPictureHandler);
+  });
+};
+
 window.preview = {
   setBigPictureHandler,
+  removeListeners,
 };

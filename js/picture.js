@@ -13,13 +13,18 @@ const renderPhoto = (photo) => {
 
 const createFragment = (photos) => {
   const fragment = document.createDocumentFragment();
-  photos.map(renderPhoto).forEach((photo) => fragment.appendChild(photo));
+  photos.map(renderPhoto).forEach((photo, idx) => {
+    photo.dataset.picIndex = idx; // set index to the a.picture with dataset
+    fragment.appendChild(photo);
+  });
   return fragment;
 };
 
-const renderPictures = (photos) => {
+const render = (photos) => {
   // Make clean up
-  pictures.querySelectorAll(`.picture`).forEach((el) => el.remove());
+  const photoElements = pictures.querySelectorAll(`.picture`);
+  window.preview.removeListeners(photoElements);
+  photoElements.forEach((el) => el.remove());
 
   // Render new pictures
   pictures.appendChild(createFragment(photos));
@@ -28,5 +33,5 @@ const renderPictures = (photos) => {
 
 // Export
 window.picture = {
-  renderPictures,
+  render,
 };

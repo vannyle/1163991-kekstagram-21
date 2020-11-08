@@ -264,7 +264,7 @@ const submitHandler = (evt) => {
     cancelUploadModal();
     renderMessageHandler(errorMessage);
   };
-  window.upload.setData(new FormData(imageUploadForm), onSuccess, onError);
+  window.upload.getData(new FormData(imageUploadForm), onSuccess, onError);
   evt.preventDefault();
   window.upload.cleanFile();
 };

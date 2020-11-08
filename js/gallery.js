@@ -2,12 +2,12 @@
 
 let initialData = [];
 
-const renderAllItems = (data) => { // data = xhr.response
+const render = (data) => { // data = xhr.response
 // Init Upload Listener
-  window.upload.setDataHandler();
+  window.upload.getDataHandler();
 
   // Render pictures and return elements
-  const pictures = window.picture.renderPictures(data); // pictures - set of elements
+  const pictures = window.picture.render(data); // pictures - set of elements
 
   // Init Preview listener
   window.preview.setBigPictureHandler(pictures, data);
@@ -22,15 +22,15 @@ const errorHandler = (errorMessage) => {
 
 const enableFiltersHandler = () => {
   // Render filters
-  window.filters.renderItems();
+  window.filters.render();
   // Init Filters listener
   window.filters.setItemsHandler(initialData);
 };
 
-const loadAllItems = () => {
+const loadItems = () => {
   window.loadData((data) => {
     initialData = data;
-    renderAllItems(data);
+    render(data);
 
     if (document.readyState === `complete`) {
       enableFiltersHandler();
@@ -44,6 +44,6 @@ const loadAllItems = () => {
 
 // Export
 window.gallery = {
-  renderAllItems,
-  loadAllItems,
+  render,
+  loadItems,
 };
