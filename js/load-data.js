@@ -4,16 +4,7 @@ const DATA_URL = `https://21.javascript.pages.academy/kekstagram/data`;
 const TIMEOUT_IN_MS = 10000;
 
 window.loadData = (onSuccess, onError) => {
-  const xhr = new XMLHttpRequest();
-  xhr.responseType = `json`;
-
-  xhr.addEventListener(`load`, () => {
-    if (xhr.status === window.utils.STATUS_CODE.OK) {
-      onSuccess(xhr.response);
-    } else {
-      onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
-    }
-  });
+  const xhr = window.utils.createXHR(onSuccess, onError);
   xhr.addEventListener(`error`, () => {
     onError(`Произошла ошибка соединения`);
   });

@@ -27,7 +27,6 @@ const renderComment = (comment) => `
     </li>
   `;
 
-
 const renderComments = (comments) => {
   const showComments = comments.slice(0, commentsLimit);
   bigPicture.querySelector(`.comments-counter`).textContent = showComments.length;

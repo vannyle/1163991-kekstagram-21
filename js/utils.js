@@ -43,11 +43,26 @@ const STATUS_CODE = {
   OK: 200,
 };
 
+const createXHR = (onSuccess, onError) => {
+  const xhr = new XMLHttpRequest();
+  xhr.responseType = `json`;
+
+  xhr.addEventListener(`load`, () => {
+    if (xhr.status === window.utils.STATUS_CODE.OK) {
+      onSuccess(xhr.response);
+    } else {
+      onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
+    }
+  });
+  return xhr;
+};
+
 window.utils = {
   getRandomizedArray,
   getSortedCommentArr,
   debounce,
   createErrorMessage,
   isEsc,
+  createXHR,
   STATUS_CODE
 };

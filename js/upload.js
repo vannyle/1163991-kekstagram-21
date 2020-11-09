@@ -37,16 +37,7 @@ const cleanFile = () => {
 };
 
 const getData = (data, onSuccess, onError) => {
-  const xhr = new XMLHttpRequest();
-  xhr.responseType = `json`;
-  xhr.addEventListener(`load`, () => {
-    if (xhr.status === window.utils.STATUS_CODE.OK) {
-      onSuccess(xhr.response);
-    } else {
-      onError(`Статус ответа: ` + xhr.status + ` ` + xhr.statusText);
-    }
-  });
-
+  const xhr = window.utils.createXHR(onSuccess, onError);
   xhr.addEventListener(`error`, () => {
     onError();
   });
